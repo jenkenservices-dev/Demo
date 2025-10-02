@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - SafetyCheck Pro™</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #003d6b;
+            --green: #4CAF50;
+            --orange: #FF9800;
+            --red: #f44336;
+            --gradient-primary: linear-gradient(135deg, #003d6b 0%, #00264d 100%);
+            --gradient-green: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            --gray-600: #475569;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-800: #1e293b;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--gradient-primary);
+            padding: 2rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .radar-logo {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            margin-right: -0.5rem;
+        }
+
+        .radar-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--white);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: radarPulse 3s ease-out infinite;
+        }
+
+        .radar-ring:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .radar-ring:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        .radar-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            background: var(--white);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes radarPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            line-height: 1;
+        }
+
+        .logo-safety {
+            color: var(--white);
+        }
+
+        .logo-check {
+            color: #66BB6A;
+        }
+
+        .logo-pro {
+            color: var(--white);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .document-header {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 61, 107, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .effective-date {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(102, 187, 106, 0.05) 100%);
+            border: 1px solid var(--green);
+            border-radius: 500px;
+            padding: 0.5rem 1.5rem;
+            display: inline-block;
+            color: var(--green);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .last-updated {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        .content-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 61, 107, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--green);
+        }
+
+        h3 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: var(--navy);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: var(--gray-600);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--gray-600);
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(102, 187, 106, 0.02) 100%);
+            border-left: 4px solid var(--green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .highlight-box h4 {
+            color: var(--navy);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info h4 {
+            color: var(--navy);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info a {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            background: var(--gradient-primary);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="radar-logo">
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-center"></div>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-safety">Safety</span><span class="logo-check">Check</span> <span class="logo-pro">Pro™</span>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../pricing.html">Pricing</a>
+                <a href="../auth/login.html">Login</a>
+                <a href="../auth/signup.html">Sign Up</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="document-header">
+            <h1>Terms of Service</h1>
+            <div class="effective-date">Effective Date: January 1, 2025</div>
+            <div class="last-updated">Last Updated: December 2024</div>
+        </div>
+
+        <div class="content-card">
+            <h2>1. Acceptance of Terms</h2>
+            <p>
+                By accessing or using SafetyCheck Pro™ ("Service"), operated by Jenken Safety Services ("Company", "we", "us", or "our"), you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of these terms, you may not access the Service.
+            </p>
+            <p>
+                These Terms apply to all visitors, users, and others who access or use the Service, including fleet managers, safety directors, and compliance officers utilizing our DOT compliance monitoring platform.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>2. Service Description</h2>
+            <p>
+                SafetyCheck Pro™ provides automated fleet compliance monitoring services that track roadside inspections and violations using publicly available FMCSA data. Our Service includes:
+            </p>
+            <ul>
+                <li>Daily monitoring of FMCSA databases for inspection and violation data</li>
+                <li>Real-time SMS and email alerts for new inspections (typically within 15-30 minutes)</li>
+                <li>CSA BASIC score tracking and reporting</li>
+                <li>Compliance dashboard and reporting tools</li>
+                <li>Fleet and driver violation history</li>
+            </ul>
+            
+            <div class="highlight-box">
+                <h4>Important Note:</h4>
+                <p>Our Service uses publicly available FMCSA data and does not require access to your FMCSA portal credentials. We cannot guarantee the completeness or real-time accuracy of FMCSA data.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>3. Account Registration</h2>
+            <h3>3.1 Account Creation</h3>
+            <p>
+                To use certain features of the Service, you must register for an account. You agree to provide accurate, current, and complete information during registration and to update such information to keep it accurate, current, and complete.
+            </p>
+            
+            <h3>3.2 Account Security</h3>
+            <p>
+                You are responsible for safeguarding the password and for any activities or actions under your account. You agree to notify us immediately of any unauthorized use of your account.
+            </p>
+            
+            <h3>3.3 Account Requirements</h3>
+            <p>You must meet the following requirements to use our Service:</p>
+            <ul>
+                <li>Be at least 18 years of age</li>
+                <li>Have the legal authority to enter into these Terms</li>
+                <li>Provide valid DOT and/or MC numbers for monitoring</li>
+                <li>Maintain current contact information for alerts</li>
+            </ul>
+        </div>
+
+        <div class="content-card">
+            <h2>4. Subscription Plans & Pricing</h2>
+            <h3>4.1 Free Plan</h3>
+            <p>
+                We offer a FREE plan for fleets with 50 or fewer drivers. This plan includes full access to our monitoring services with standard alert frequencies.
+            </p>
+            
+            <h3>4.2 Paid Plans</h3>
+            <p>
+                Fleets with more than 50 drivers are subject to our paid subscription plans. Current pricing is available on our pricing page and is subject to change with 30 days' notice.
+            </p>
+            
+            <h3>4.3 Payment Terms</h3>
+            <ul>
+                <li>All paid subscriptions are billed monthly in advance</li>
+                <li>No setup fees or contracts required</li>
+                <li>Payments are processed securely through our payment provider</li>
+                <li>You authorize us to charge your payment method on a recurring basis</li>
+            </ul>
+            
+            <h3>4.4 Refunds</h3>
+            <p>
+                Monthly subscription fees are non-refundable. You may cancel your subscription at any time, and cancellation will take effect at the end of the current billing period.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>8. Disclaimer of Warranties</h2>
+            <p>
+                THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS. WE EXPRESSLY DISCLAIM ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+            </p>
+            <p>
+                We do not warrant that the Service will be uninterrupted, timely, secure, or error-free, or that defects will be corrected.
+            </p>
+            
+            <div class="highlight-box">
+                <h4>Compliance Notice:</h4>
+                <p>SafetyCheck Pro™ is a monitoring tool only. We do not provide legal advice. You are solely responsible for ensuring your fleet's compliance with all applicable DOT regulations and laws.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>14. Contact Information</h2>
+            <div class="contact-info">
+                <h4>Questions about these Terms?</h4>
+                <p><strong>Jenken Safety Services</strong></p>
+                <p>Email: <a href="mailto:legal@safetycheckpro.com">legal@safetycheckpro.com</a></p>
+                <p>Support: <a href="mailto:support@safetycheckpro.com">support@safetycheckpro.com</a></p>
+                <p>Phone: 1-800-SAFETY-1</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="../contact.html">Contact Us</a>
+        </div>
+        <p>&copy; 2025 SafetyCheck Pro™ - Powered by Jenken Safety Services</p>
+    </footer>
+</body>
+</html>

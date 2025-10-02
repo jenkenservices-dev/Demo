@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - SafetyCheck Pro™</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #003d6b;
+            --green: #4CAF50;
+            --orange: #FF9800;
+            --red: #f44336;
+            --gradient-primary: linear-gradient(135deg, #003d6b 0%, #00264d 100%);
+            --gradient-green: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            --gray-600: #475569;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-800: #1e293b;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--gradient-primary);
+            padding: 2rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .radar-logo {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            margin-right: -0.5rem;
+        }
+
+        .radar-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--white);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: radarPulse 3s ease-out infinite;
+        }
+
+        .radar-ring:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .radar-ring:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        .radar-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            background: var(--white);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes radarPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            line-height: 1;
+        }
+
+        .logo-safety {
+            color: var(--white);
+        }
+
+        .logo-check {
+            color: #66BB6A;
+        }
+
+        .logo-pro {
+            color: var(--white);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .document-header {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 61, 107, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .effective-date {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(102, 187, 106, 0.05) 100%);
+            border: 1px solid var(--green);
+            border-radius: 500px;
+            padding: 0.5rem 1.5rem;
+            display: inline-block;
+            color: var(--green);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .last-updated {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        .content-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 61, 107, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--green);
+        }
+
+        h3 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: var(--navy);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: var(--gray-600);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--gray-600);
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .data-table th {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            color: var(--gray-600);
+        }
+
+        .data-table tr:hover td {
+            background: #f8f9fa;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(102, 187, 106, 0.02) 100%);
+            border-left: 4px solid var(--green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .highlight-box h4 {
+            color: var(--navy);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .privacy-icon {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(102, 187, 106, 0.1) 100%);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            margin-right: 1rem;
+            vertical-align: middle;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info h4 {
+            color: var(--navy);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info a {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            background: var(--gradient-primary);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .data-table {
+                font-size: 0.9rem;
+            }
+
+            .data-table th, .data-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="radar-logo">
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-center"></div>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-safety">Safety</span><span class="logo-check">Check</span> <span class="logo-pro">Pro™</span>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../pricing.html">Pricing</a>
+                <a href="../auth/login.html">Login</a>
+                <a href="../auth/signup.html">Sign Up</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="document-header">
+            <h1>Privacy Policy</h1>
+            <div class="effective-date">Effective Date: January 1, 2025</div>
+            <div class="last-updated">Last Updated: December 2024</div>
+        </div>
+
+        <div class="content-card">
+            <h2>
+                <span class="privacy-icon">🔒</span>
+                1. Our Commitment to Privacy
+            </h2>
+            <p>
+                At SafetyCheck Pro™, operated by Jenken Safety Services ("we", "us", "our"), we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our fleet compliance monitoring service.
+            </p>
+            <p>
+                We are committed to protecting your personal and business information while providing you with the most effective DOT compliance monitoring tools available.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>2. Information We Collect</h2>
+            
+            <h3>2.1 Information You Provide</h3>
+            <p>We collect information you provide directly to us, including:</p>
+            <ul>
+                <li><strong>Account Information:</strong> Name, email address, phone number, company name</li>
+                <li><strong>Fleet Information:</strong> DOT number, MC number, fleet size, vehicle details</li>
+                <li><strong>Payment Information:</strong> Billing address, payment method details (processed securely by our payment provider)</li>
+                <li><strong>Communication Data:</strong> Support inquiries, feedback, and correspondence</li>
+            </ul>
+
+            <h3>2.2 Information We Collect Automatically</h3>
+            <p>When you use our Service, we automatically collect certain information:</p>
+            <ul>
+                <li><strong>Usage Data:</strong> Features accessed, frequency of use, search queries</li>
+                <li><strong>Device Information:</strong> IP address, browser type, operating system</li>
+                <li><strong>Log Data:</strong> Access times, pages viewed, system activity</li>
+                <li><strong>Cookies:</strong> Session cookies for authentication and preferences</li>
+            </ul>
+
+            <h3>2.3 Information from FMCSA</h3>
+            <p>We access publicly available data from FMCSA databases, including:</p>
+            <ul>
+                <li>Roadside inspection records</li>
+                <li>Violation histories</li>
+                <li>CSA BASIC scores</li>
+                <li>Carrier safety ratings</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h4>Important Note:</h4>
+                <p>We NEVER request or store your FMCSA portal login credentials. All FMCSA data we access is publicly available information.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>3. How We Use Your Information</h2>
+            <p>We use the collected information for the following purposes:</p>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Purpose</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Service Delivery</strong></td>
+                        <td>Monitor your fleet's compliance, send alerts, generate reports</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Account Management</strong></td>
+                        <td>Create and maintain your account, process payments</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Communications</strong></td>
+                        <td>Send violation alerts, service updates, respond to inquiries</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Service Improvement</strong></td>
+                        <td>Analyze usage patterns, develop new features, fix issues</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Legal Compliance</strong></td>
+                        <td>Comply with legal obligations, enforce our terms</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-card">
+            <h2>4. Information Sharing and Disclosure</h2>
+            
+            <h3>4.1 We DO NOT Sell Your Information</h3>
+            <p>
+                We never sell, rent, or trade your personal or fleet information to third parties for their marketing purposes.
+            </p>
+            
+            <h3>4.2 Limited Sharing</h3>
+            <p>We may share your information only in these specific circumstances:</p>
+            <ul>
+                <li><strong>Service Providers:</strong> With trusted vendors who help us operate our service (e.g., SMS/email providers, payment processors)</li>
+                <li><strong>Legal Requirements:</strong> When required by law, subpoena, or court order</li>
+                <li><strong>Safety & Security:</strong> To protect rights, safety, and security of our users and service</li>
+                <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets</li>
+                <li><strong>With Your Consent:</strong> When you explicitly authorize us to share information</li>
+            </ul>
+        </div>
+
+        <div class="content-card">
+            <h2>5. Data Security</h2>
+            <p>
+                We implement comprehensive security measures to protect your information:
+            </p>
+            <ul>
+                <li>✓ SSL/TLS encryption for data transmission</li>
+                <li>✓ Encrypted storage for sensitive information</li>
+                <li>✓ Regular security audits and updates</li>
+                <li>✓ Access controls and authentication requirements</li>
+                <li>✓ Employee training on data protection</li>
+                <li>✓ Secure data backup procedures</li>
+            </ul>
+            
+            <p>
+                While we strive to use commercially acceptable means to protect your information, no method of transmission over the Internet or electronic storage is 100% secure.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>6. Your Rights and Choices</h2>
+            
+            <h3>6.1 Access and Update</h3>
+            <p>You can access and update your account information at any time through your dashboard settings.</p>
+            
+            <h3>6.2 Alert Preferences</h3>
+            <p>You can customize your alert preferences, including:</p>
+            <ul>
+                <li>Alert frequency and timing</li>
+                <li>Notification methods (SMS, email, or both)</li>
+                <li>Types of violations to monitor</li>
+            </ul>
+            
+            <h3>6.3 Data Deletion</h3>
+            <p>
+                You may request deletion of your account and associated data by contacting our support team. Note that we may retain certain information as required by law or for legitimate business purposes.
+            </p>
+            
+            <h3>6.4 Marketing Communications</h3>
+            <p>
+                You can opt-out of promotional emails by clicking the "unsubscribe" link or contacting us directly. Note that you cannot opt-out of service-related communications (e.g., violation alerts, account notifications).
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>13. Contact Us</h2>
+            <div class="contact-info">
+                <h4>Questions or Concerns?</h4>
+                <p>If you have questions about this Privacy Policy or our data practices, please contact us:</p>
+                <p><strong>Jenken Safety Services</strong></p>
+                <p>Email: <a href="mailto:privacy@safetycheckpro.com">privacy@safetycheckpro.com</a></p>
+                <p>Phone: 1-800-SAFETY-1</p>
+                
+                <p style="margin-top: 1rem;">
+                    <strong>Data Protection Officer:</strong><br>
+                    <a href="mailto:dpo@safetycheckpro.com">dpo@safetycheckpro.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="../contact.html">Contact Us</a>
+        </div>
+        <p>&copy; 2025 SafetyCheck Pro™ - Powered by Jenken Safety Services</p>
+    </footer>
+</body>
+</html>
