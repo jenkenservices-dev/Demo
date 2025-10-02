@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Navigation Fixer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .instructions {
+            background: #fff4e6;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        
+        .instructions h3 {
+            color: #f59e0b;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .instructions li {
+            margin: 8px 0;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 8px;
+            padding: 60px 40px;
+            text-align: center;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f1ff;
+            transform: translateY(-2px);
+        }
+        
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8e9ff;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .upload-area p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .file-list {
+            margin-top: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+        }
+        
+        .file-item {
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+        
+        .file-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+        }
+        
+        .file-name {
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .file-status {
+            color: #999;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            background: #f3f4f6;
+        }
+        
+        .file-status.fixed {
+            color: white;
+            background: #10b981;
+            font-weight: 600;
+        }
+        
+        .progress {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 40px;
+            background: #e0e0e0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .results {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        
+        .results h2 {
+            color: #10b981;
+            margin-bottom: 20px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #a7f3d0;
+        }
+        
+        .stat:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: #047857;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .stat-value {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 24px;
+        }
+        
+        .download-btn {
+            margin-top: 25px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            font-size: 18px;
+        }
+        
+        .download-btn:hover {
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .file-count {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Website Navigation Fixer</h1>
+        <p class="subtitle">Automatically fix all navigation links in your HTML files - No installation required!</p>
+        
+        <div class="instructions">
+            <h3>📋 Simple 4-Step Process:</h3>
+            <ol>
+                <li><strong>Click the upload area below</strong> (or drag files directly)</li>
+                <li><strong>Select ALL your HTML files</strong> - Hold Ctrl (Windows) or Cmd (Mac) and click all files in all folders (admin, auth, Client, etc.)</li>
+                <li><strong>Click "Fix Navigation Links"</strong> - The tool will automatically correct all paths</li>
+                <li><strong>Download the ZIP file</strong> - Extract and replace your old files</li>
+            </ol>
+        </div>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <h3>Click Here to Select HTML Files</h3>
+            <p>or drag and drop your HTML files here</p>
+            <input type="file" id="fileInput" multiple accept=".html" style="display: none;" webkitdirectory directory>
+        </div>
+        
+        <div class="file-count" id="fileCount" style="display: none;"></div>
+        
+        <div class="file-list" id="fileList" style="display: none;"></div>
+        
+        <button id="fixButton" disabled>Fix Navigation Links</button>
+        
+        <div class="progress" id="progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
+            </div>
+        </div>
+        
+        <div class="results" id="results">
+            <h2><span>✅</span> Fix Complete!</h2>
+            <div class="stat">
+                <span class="stat-label">Files Processed:</span>
+                <span class="stat-value" id="filesProcessed">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Files Modified:</span>
+                <span class="stat-value" id="filesModified">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Total Links Fixed:</span>
+                <span class="stat-value" id="linksFixed">0</span>
+            </div>
+            <button class="download-btn" id="downloadButton">⬇️ Download Fixed Files (ZIP)</button>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileList = document.getElementById('fileList');
+        const fileCount = document.getElementById('fileCount');
+        const fixButton = document.getElementById('fixButton');
+        const progress = document.getElementById('progress');
+        const progressFill = document.getElementById('progressFill');
+        const results = document.getElementById('results');
+        const downloadButton = document.getElementById('downloadButton');
+        
+        let files = [];
+        let fixedFiles = [];
+        
+        // Comprehensive link fix rules
+        const getLinkRules = (filepath) => {
+            const filename = filepath.toLowerCase();
+            
+            // Determine location
+            if (filename.includes('admin/')) {
+                return [
+                    { from: /href=["']index\.html["']/g, to: 'href="../index.html"' },
+                    { from: /href=["']demo\.html["']/g, to: 'href="../demo.html"' },
+                    { from: /href=["']pricing\.html["']/g, to: 'href="../pricing.html"' },
+                    { from: /href=["']contact\.html["']/g, to: 'href="../contact.html"' },
+                    { from: /href=["']faq\.html["']/g, to: 'href="../faq.html"' },
+                    { from: /href=["']login-page\.html["']/g, to: 'href="../login-page.html"' },
+                    { from: /href=["']signup-page\.html["']/g, to: 'href="../signup-page.html"' },
+                    { from: /href=["']login\.html["']/g, to: 'href="../login-page.html"' },
+                    { from: /href=["']signup\.html["']/g, to: 'href="../signup-page.html"' },
+                    { from: /href=["']dashboard\.html["']/g, to: 'href="../Client/dashboard.html"' },
+                    { from: /href=["']client-settings-page\.html["']/g, to: 'href="../Client/client-settings-page.html"' },
+                    { from: /href=["']settings\.html["']/g, to: 'href="../Client/client-settings-page.html"' },
+                    { from: /href=["']support-page\.html["']/g, to: 'href="../Client/support-page.html"' },
+                    { from: /href=["']support\.html["']/g, to: 'href="../Client/support-page.html"' },
+                    { from: /href=["']sms_data_page\.html["']/g, to: 'href="../Client/SMS/sms_data_page.html"' },
+                    { from: /href=["']SMS\/sms_data_page\.html["']/g, to: 'href="../Client/SMS/sms_data_page.html"' },
+                    { from: /href=["']alert-inspection\.html["']/g, to: 'href="../Client/Alert/alert-inspection.html"' },
+                    { from: /href=["']Alert\/alert-inspection\.html["']/g, to: 'href="../Client/Alert/alert-inspection.html"' }
+                ];
+            } else if (filename.includes('auth/')) {
+                return [
+                    { from: /href=["']index\.html["']/g, to: 'href="../index.html"' },
+                    { from: /href=["']login-page\.html["']/g, to: 'href="../login-page.html"' },
+                    { from: /href=["']signup-page\.html["']/g, to: 'href="../signup-page.html"' },
+                    { from: /href=["']login\.html["']/g, to: 'href="../login-page.html"' },
+                    { from: /href=["']signup\.html["']/g, to: 'href="../signup-page.html"' },
+                    { from: /href=["']dashboard\.html["']/g, to: 'href="../Client/dashboard.html"' }
+                ];
+            } else if (filename.includes('client/sms/')) {
+                return [
+                    { from: /href=["']index\.html["']/g, to: 'href="../../index.html"' },
+                    { from: /href=["']login-page\.html["']/g, to: 'href="../../login-page.html"' },
+                    { from: /href=["']login\.html["']/g, to: 'href="../../login-page.html"' },
+                    { from: /href=["']dashboard\.html["']/g, to: 'href="../dashboard.html"' },
+                    { from: /href=["']client-settings-page\.html["']/g, to: 'href="../client-settings-page.html"' },
+                    { from: /href=["']settings\.html["']/g, to: 'href="../client-settings-page.html"' },
+                    { from: /href=["']support-page\.html["']/g, to: 'href="../support-page.html"' },
+                    { from: /href=["']support\.html["']/g, to: 'href="../support-page.html"' },
+                    { from: /href=["']alert-inspection\.html["']/g, to: 'href="../Alert/alert-inspection.html"' }
+                ];
+            } else if (filename.includes('client/alert/')) {
+                return [
+                    { from: /href=["']index\.html["']/g, to: 'href="../../index.html"' },
+                    { from: /href=["']login-page\.html["']/g, to: 'href="../../login-page.html"' },
+                    { from: /href=["']dashboard\.html["']/g, to: 'href="../dashboard.html"' },
+                    { from: /href=["']client-settings-page\.html["']/g, to: 'href="../client-settings-page.html"' },
+                    { from: /href=["']settings\.html["']/g, to: 'href="../client-settings-page.html"' },
+                    { from: /href=["']sms_data_page\.html["']/g, to: 'href="../SMS/sms_data_page.html"' }
+                ];
+            } else if (filename.includes('client/')) {
+                return [
+                    { from: /href=["']index\.html["']/g, to: 'href="../index.html"' },
+                    { from: /href=["']login-page\.html["']/g, to: 'href="../login-page.html"' },
+                    { from: /href=["']signup-page\.html["']/g, to: 'href="../signup-page.html"' },
+                    { from: /href=["']login\.html["']/g, to: 'href="../login-page.html"' },
+                    { from: /href=["']settings\.html["']/g, to: 'href="Client/client-settings-page.html"' },
+                    { from: /href=["']support\.html["']/g, to: 'href="Client/support-page.html"' },
+                    { from: /href=["']sms_data_page\.html["']/g, to: 'href="Client/SMS/sms_data_page.html"' },
+                    { from: /href=["']SMS\/sms_data_page\.html["']/g, to: 'href="Client/SMS/sms_data_page.html"' },
+                    { from: /href=["']alert-inspection\.html["']/g, to: 'href="Client/Alert/alert-inspection.html"' },
+                    { from: /href=["']Alert\/alert-inspection\.html["']/g, to: 'href="Client/Alert/alert-inspection.html"' }
+                ];
+            } else {
+                // Root files
+                return [
+                    { from: /href=["']login\.html["']/g, to: 'href="login-page.html"' },
+                    { from: /href=["']signup\.html["']/g, to: 'href="signup-page.html"' },
+                    { from: /href=["']auth\/login\.html["']/g, to: 'href="login-page.html"' },
+                    { from: /href=["']auth\/signup\.html["']/g, to: 'href="signup-page.html"' },
+                    { from: /href=["']forgot-password\.html["']/g, to: 'href="auth/forgot-password-page.html"' },
+                    { from: /href=["']dashboard\.html["']/g, to: 'href="Client/dashboard.html"' },
+                    { from: /href=["']client-settings-page\.html["']/g, to: 'href="Client/client-settings-page.html"' },
+                    { from: /href=["']settings\.html["']/g, to: 'href="Client/client-settings-page.html"' },
+                    { from: /href=["']support-page\.html["']/g, to: 'href="Client/support-page.html"' },
+                    { from: /href=["']support\.html["']/g, to: 'href="Client/support-page.html"' },
+                    { from: /href=["']sms_data_page\.html["']/g, to: 'href="Client/SMS/sms_data_page.html"' },
+                    { from: /href=["']SMS\/sms_data_page\.html["']/g, to: 'href="Client/SMS/sms_data_page.html"' },
+                    { from: /href=["']alert-inspection\.html["']/g, to: 'href="Client/Alert/alert-inspection.html"' },
+                    { from: /href=["']Alert\/alert-inspection\.html["']/g, to: 'href="Client/Alert/alert-inspection.html"' },
+                    { from: /href=["']Alert\/alert-inspection-detail\.html["']/g, to: 'href="Client/Alert/alert-inspection-detail.html"' }
+                ];
+            }
+        };
+        
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        function handleFiles(fileArray) {
+            files = Array.from(fileArray).filter(f => f.name.endsWith('.html'));
+            
+            if (files.length === 0) {
+                alert('⚠️ No HTML files found! Please select your HTML files.');
+                return;
+            }
+            
+            fileCount.style.display = 'block';
+            fileCount.textContent = `✅ ${files.length} HTML files selected`;
+            
+            displayFiles();
+            fixButton.disabled = false;
+        }
+        
+        function displayFiles() {
+            fileList.style.display = 'block';
+            fileList.innerHTML = files.map(f => {
+                const path = f.webkitRelativePath || f.name;
+                return `
+                    <div class="file-item" data-name="${f.name}">
+                        <span class="file-name">${path}</span>
+                        <span class="file-status">Ready</span>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        fixButton.addEventListener('click', async () => {
+            fixButton.disabled = true;
+            progress.style.display = 'block';
+            fixedFiles = [];
+            
+            let processed = 0;
+            let modified = 0;
+            let totalFixes = 0;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const content = await file.text();
+                const filepath = file.webkitRelativePath || file.name;
+                const { fixed, changes } = fixNavigation(content, filepath);
+                
+                fixedFiles.push({
+                    path: filepath,
+                    name: file.name,
+                    content: fixed
+                });
+                
+                processed++;
+                if (changes > 0) {
+                    modified++;
+                    totalFixes += changes;
+                }
+                
+                const percent = Math.round((processed / files.length) * 100);
+                progressFill.style.width = percent + '%';
+                progressFill.textContent = percent + '%';
+                
+                const item = document.querySelector(`[data-name="${file.name}"]`);
+                if (item) {
+                    const status = item.querySelector('.file-status');
+                    status.textContent = changes > 0 ? `✓ ${changes} fixes` : 'No changes';
+                    if (changes > 0) status.classList.add('fixed');
+                }
+                
+                // Small delay for visual effect
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+            
+            document.getElementById('filesProcessed').textContent = processed;
+            document.getElementById('filesModified').textContent = modified;
+            document.getElementById('linksFixed').textContent = totalFixes;
+            
+            results.style.display = 'block';
+            results.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        function fixNavigation(content, filepath) {
+            let fixed = content;
+            let changes = 0;
+            
+            const rules = getLinkRules(filepath);
+            
+            rules.forEach(rule => {
+                const matches = fixed.match(rule.from);
+                if (matches) {
+                    fixed = fixed.replace(rule.from, rule.to);
+                    changes += matches.length;
+                }
+            });
+            
+            return { fixed, changes };
+        }
+        
+        downloadButton.addEventListener('click', async () => {
+            const zip = new JSZip();
+            
+            // Maintain folder structure
+            fixedFiles.forEach(file => {
+                const folderPath = file.path.includes('/') ? file.path : file.name;
+                zip.file(folderPath, file.content);
+            });
+            
+            const blob = await zip.generateAsync({ type: 'blob' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fixed-navigation-files.zip';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafetyCheckPro - SMS Data</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #003d6b;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #ef4444;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --border-color: #e5e7eb;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-secondary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            flex-shrink: 0;
+            margin-right: -0.5rem;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .logo-tagline {
+            font-size: 0.5rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.125rem;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 0;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 2rem;
+            text-decoration: none;
+            color: #4b5563;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            background: #f3f4f6;
+        }
+
+        .nav-item.active {
+            color: white;
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #4CAF50;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
+        }
+
+        .sidebar-footer {
+            padding: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .powered-by {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 50;
+        }
+
+        .help-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,61,107,0.15);
+        }
+
+        .help-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,61,107,0.3);
+        }
+
+        .help-button svg {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: white;
+            padding: 0.5rem 1rem 0.5rem 0.5rem;
+            border-radius: 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .user-details {
+            padding-right: 0.5rem;
+        }
+
+        .user-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #111827;
+            line-height: 1.2;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: #6b7280;
+            line-height: 1.2;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            height: 100vh;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .content-wrapper {
+            padding: 2rem;
+            padding-top: 5rem;
+            padding-bottom: 200px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #f3f4f6;
+            margin-bottom: 2rem;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .stat-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #003d6b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .basic-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .basic-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 2px solid #f3f4f6;
+            transition: all 0.3s ease;
+        }
+
+        .basic-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .basic-card.alert {
+            border-color: #FF9800;
+            background: rgba(255, 152, 0, 0.02);
+        }
+
+        .basic-card.danger {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.02);
+        }
+
+        .basic-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .basic-icon {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+        }
+
+        .basic-info {
+            flex: 1;
+        }
+
+        .basic-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.25rem;
+        }
+
+        .basic-description {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .basic-score-display {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .basic-score-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .basic-score-value.green {
+            color: #4CAF50;
+        }
+
+        .basic-score-value.orange {
+            color: #FF9800;
+        }
+
+        .basic-score-value.red {
+            color: #ef4444;
+        }
+
+        .basic-percentile {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .basic-bar-container {
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 500px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 0.75rem;
+        }
+
+        .basic-bar {
+            height: 100%;
+            border-radius: 500px;
+            transition: width 0.8s ease;
+        }
+
+        .basic-bar.green {
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+        }
+
+        .basic-bar.orange {
+            background: linear-gradient(90deg, #FF9800, #FFB74D);
+        }
+
+        .basic-bar.red {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+
+        .threshold-marker {
+            position: absolute;
+            top: -4px;
+            bottom: -4px;
+            width: 2px;
+            background: #9ca3af;
+            opacity: 0.5;
+        }
+
+        .basic-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f3f4f6;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 500px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge.success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+        }
+
+        .status-badge.warning {
+            background: rgba(255, 152, 0, 0.1);
+            color: #FF9800;
+        }
+
+        .status-badge.danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .dataq-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 1rem;
+            width: 300px;
+            z-index: 1000;
+        }
+
+        .dataq-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .dataq-icon-box {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dataq-icon-box svg {
+            width: 18px;
+            height: 18px;
+            color: white;
+        }
+
+        .dataq-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #111827;
+        }
+
+        .dataq-content {
+            margin-bottom: 0.75rem;
+        }
+
+        .dataq-text {
+            font-size: 0.75rem;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .dataq-button {
+            width: 100%;
+            padding: 0.5rem 1.25rem;
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+            color: white;
+            border: none;
+            border-radius: 500px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dataq-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,61,107,0.3);
+        }
+
+        .dataq-footer {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.625rem;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            color: #111827;
+            padding: 3rem 0 1rem;
+            margin-top: 3rem;
+            margin-bottom: 350px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #003d6b;
+        }
+
+        .footer-disclaimer {
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .footer-disclaimer h4 {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: #111827;
+        }
+
+        .footer-disclaimer p {
+            font-size: 0.75rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .footer-bottom {
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100%;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 1001;
+                background: white;
+                border: none;
+                padding: 0.5rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                cursor: pointer;
+            }
+
+            .main-content {
+                min-height: 100vh;
+            }
+
+            .basic-scores-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="30" r="25" fill="none" stroke="#4CAF50" stroke-width="2" opacity="0.3">
+                            <animate attributeName="r" from="20" to="28" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" from="0.5" to="0" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="30" cy="30" r="20" fill="none" stroke="#4CAF50" stroke-width="3" opacity="0.8"/>
+                        <circle cx="30" cy="30" r="12" fill="none" stroke="#4CAF50" stroke-width="2.5" opacity="0.6"/>
+                        <g transform-origin="30 30" style="animation: rotate 3s linear infinite;">
+                            <line x1="30" y1="30" x2="30" y2="10" stroke="#4CAF50" stroke-width="2.5" opacity="0.8"/>
+                            <path d="M 30 30 L 30 10 A 20 20 0 0 1 45 20 Z" fill="#4CAF50" opacity="0.15"/>
+                        </g>
+                        <circle cx="30" cy="30" r="5" fill="#003d6b"/>
+                        <circle cx="30" cy="30" r="3" fill="#4CAF50"/>
+                    </svg>
+                    <div class="logo-text-wrapper">
+                        <div class="logo-text">
+                            <span style="color: #003d6b;">Safety</span><span style="color: #4CAF50;">Check</span><span style="color: #003d6b;">Pro</span>
+                        </div>
+                        <div class="logo-tagline">Powered by Jenken Safety Services</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="inspections.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+                    </svg>
+                    Inspections
+                </a>
+                <a href="oos.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                    </svg>
+                    Out of Service
+                </a>
+                <a href="compliance.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    </svg>
+                    SMS Data
+                </a>
+                <a href="alert-history.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                    </svg>
+                    Alert History
+                </a>
+                <a href="Client/support-page.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                    </svg>
+                    Support
+                </a>
+                <a href="dataq.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                    DataQ Guide
+                </a>
+                <a href="billing.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                    </svg>
+                    Billing
+                </a>
+                <a href="Client/client-settings-page.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                    Settings
+                </a>
+                <a href="action-items.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                    </svg>
+                    Action Items
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="powered-by">
+                    Powered by<br>Jenken Safety Services
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <button class="help-button" onclick="window.location.href="Client/support-page.html"" title="Get Help">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                    </svg>
+                </button>
+                <div class="user-info">
+                    <div class="user-avatar">JD</div>
+                    <div class="user-details">
+                        <div class="user-name">John Doe</div>
+                        <div class="user-role">Fleet Admin</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h1>SMS Data Dashboard</h1>
+                    <p>Safety Measurement System (SMS) BASIC Category Performance</p>
+                </div>
+
+                <div class="summary-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">BASICs Monitored</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label">Above Alert Threshold</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label">Requires Immediate Action</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">86</div>
+                        <div class="stat-label">Total Inspections (24mo)</div>
+                    </div>
+                </div>
+
+                <div class="basic-scores-grid">
+                    <div class="basic-card">
+                        <div class="basic-header">
+                            <svg class="basic-icon" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 4l-9 16h18L12 4z" stroke="#ef4444" stroke-width="2" fill="rgba(239,68,68,0.15)" stroke-linejoin="round"/>
+                                <path d="M12 9v5M12 16v.5" stroke="#003d6b" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <div class="basic-info">
+                                <div class="basic-name">Unsafe Driving</div>
+                                <div class="basic-description">Operation of CMVs by drivers in a dangerous manner</div>
+                            </div>
+                        </div>
+                        <div class="basic-score-display">
+                            <div class="basic-score-value green">42</div>
+                            <div class="basic-percentile">percentile</div>
+                        </div>
+                        <div class="basic-bar-container">
+                            <div class="threshold-marker" style="left: 65%"></div>
+                            <div class="threshold-marker" style="left: 80%"></div>
+                            <div class="basic-bar green" style="width: 42%"></div>
+                        </div>
+                        <div class="basic-stats">
+                            <span>24 inspections</span>
+                            <span class="status-badge success">
+                                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                </svg>
+                                Good Standing
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="basic-card alert">
+                        <div class="basic-header">
+                            <svg class="basic-icon" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="8" stroke="#003d6b" stroke-width="1.5"/>
+                                <path d="M12 7v5l3 3" stroke="#FF9800" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 4v-2M12 22v-2M4 12h-2M22 12h-2" stroke="#003d6b" stroke-width="1" opacity="0.3"/>
+                            </svg>
+                            <div class="basic-info">
+                                <div class="basic-name">Hours of Service</div>
+                                <div class="basic-description">Compliance with HOS regulations</div>
+                            </div>
+                        </div>
+                        <div class="basic-score-display">
+                            <div class="basic-score-value orange">68</div>
+                            <div class="basic-percentile">percentile</div>
+                        </div>
+                        <div class="basic-bar-container">
+                            <div class="threshold-marker" style="left: 65%"></div>
+                            <div class="threshold-marker" style="left: 80%"></div>
+                            <div class="basic-bar orange" style="width: 68%"></div>
+                        </div>
+                        <div class="basic-stats">
+                            <span>24 inspections</span>
+                            <span class="status-badge warning">
+                                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+                                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                                    <path d="M12 8v4M12 14v.01" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                </svg>
+                                BASIC Alert
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="basic-card">
+                        <div class="basic-header">
+                            <svg class="basic-icon" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="10" r="6" stroke="#003d6b" stroke-width="1.5" fill="rgba(76,175,80,0.1)"/>
+                                <path d="M9 10l2 2 4-4" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 16v5l4-2 4 2v-5" stroke="#003d6b" stroke-width="1.5"/>
+                            </svg>
+                            <div class="basic-info">
+                                <div class="basic-name">Driver Fitness</div>
+                                <div class="basic-description">Driver qualification and medical certification</div>
+                            </div>
+                        </div>
+                        <div class="basic-score-display">
+                            <div class="basic-score-value green">35</div>
+                            <div class="basic-percentile">percentile</div>
+                        </div>
+                        <div class="basic-bar-container">
+                            <div class="threshold-marker" style="left: 65%"></div>
+                            <div class="threshold-marker" style="left: 80%"></div>
+                            <div class="basic-bar green" style="width: 35%"></div>
+                        </div>
+                        <div class="basic-stats">
+                            <span>18 inspections</span>
+                            <span class="status-badge success">
+                                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                </svg>
+                                Good Standing
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="basic-card">
+                        <div class="basic-header">
+                            <svg class="basic-icon" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 3h6v6l4 8a2 2 0 01-2 3H7a2 2 0 01-2-3l4-8V3z" stroke="#003d6b" stroke-width="1.5"/>
+                                <path d="M9 14h6l2 3H7l2-3z" fill="rgba(239,68,68,0.2)"/>
+                                <path d="M11 3h2" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            <div class="basic-info">
+                                <div class="basic-name">Controlled Substances</div>
+                                <div class="basic-description">Alcohol and drug violations</div>
+                            </div>
+                        </div>
+                        <div class="basic-score-display">
+                            <div class="basic-score-value green">18</div>
+                            <div class="basic-percentile">percentile</div>
+                        </div>
+                        <div class="basic-bar-container">
+                            <div class="threshold-marker" style="left: 65%"></div>
+                            <div class="threshold-marker" style="left: 80%"></div>
+                            <div class="basic-bar green" style="width: 18%"></div>
+                        </div>
+                        <div class="basic-stats">
+                            <span>12 inspections</span>
+                            <span class="status-badge success">
+                                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                </svg>
+                                Good Standing
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="basic-card danger">
+                        <div class="basic-header">
+                            <svg class="basic-icon" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="10" width="18" height="8" rx="1" stroke="#003d6b" stroke-width="1.5"/>
+                                <path d="M8 10V7a2 2 0 012-2h4a2 2 0 012 2v3" stroke="#003d6b" stroke-width="1.5"/>
+                                <path d="M3 14h18" stroke="#FF9800" stroke-width="1.5"/>
+                                <circle cx="12" cy="14" r="1" fill="#FF9800"/>
+                            </svg>
+                            <div class="basic-info">
+                                <div class="basic-name">Vehicle Maintenance</div>
+                                <div class="basic-description">CMV maintenance and equipment violations</div>
+                            </div>
+                        </div>
+                        <div class="basic-score-display">
+                            <div class="basic-score-value red">82</div>
+                            <div class="basic-percentile">percentile</div>
+                        </div>
+                        <div class="basic-bar-container">
+                            <div class="threshold-marker" style="left: 65%"></div>
+                            <div class="threshold-marker" style="left: 80%"></div>
+                            <div class="basic-bar red" style="width: 82%"></div>
+                        </div>
+                        <div class="basic-stats">
+                            <span>32 inspections</span>
+                            <span class="status-badge danger">
+                                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+                                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                                    <path d="M12 8v4M12 14v.01" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                </svg>
+                                Roadside Alert
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 600; color: #111827;">About SMS BASIC Scores</h3>
+                        <span style="font-size: 0.75rem; color: #6b7280;">Last Updated: September 2025</span>
+                    </div>
+                    <p style="font-size: 0.875rem; color: #6b7280; line-height: 1.6; margin-bottom: 1rem;">
+                        The Safety Measurement System (SMS) uses inspection data to monitor carrier safety performance across five BASIC (Behavior Analysis and Safety Improvement Category) categories. Percentile rankings from 0-100 indicate relative performance, with lower scores indicating better safety performance compared to similar carriers.
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 12px;">
+                        <div>
+                            <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">Alert Threshold</div>
+                            <div style="font-size: 0.875rem; font-weight: 600; color: #FF9800;">65th percentile</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">Intervention Threshold</div>
+                            <div style="font-size: 0.875rem; font-weight: 600; color: #ef4444;">80th percentile</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">Review Period</div>
+                            <div style="font-size: 0.875rem; font-weight: 600; color: #111827;">24 months</div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="footer">
+                    <div class="footer-content">
+                        <div class="footer-grid">
+                            <div class="footer-section">
+                                <h3>About SafetyCheckPro</h3>
+                                <p style="color: #6b7280; font-size: 0.875rem; line-height: 1.5;">
+                                    Powered by Jenken Safety Services - Your trusted partner in fleet safety compliance.
+                                </p>
+                            </div>
+                            
+                            <div class="footer-section">
+                                <h3>Quick Links</h3>
+                                <ul class="footer-links">
+                                    <li><a href="Client/support-page.html">Support</a></li>
+                                    <li><a href="dataq.html">DataQ Guide</a></li>
+                                    <li><a href="https://ai.fmcsa.dot.gov" target="_blank">FMCSA Portal ↗</a></li>
+                                    <li><a href="terms.html">Terms of Service</a></li>
+                                    <li><a href="privacy.html">Privacy Policy</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="footer-section">
+                                <h3>Contact</h3>
+                                <ul class="footer-links">
+                                    <li><a href="Client/support-page.html">Contact Support</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="footer-disclaimer">
+                            <h4>Important Disclaimer</h4>
+                            <p>
+                                SafetyCheckPro monitors public FMCSA databases and provides notifications when new inspection data is posted. 
+                                All data displayed comes directly from official FMCSA sources. SafetyCheckPro does not calculate, predict, or modify any scores or data. 
+                                SMS BASIC percentiles are calculated monthly by FMCSA, not SafetyCheckPro.
+                            </p>
+                        </div>
+                        
+                        <div class="footer-bottom">
+                            <div>© 2025 Jenken Safety Services. All rights reserved.</div>
+                            <div>SafetyCheckPro is a product of Jenken Safety Services</div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <div class="dataq-widget">
+        <div class="dataq-header">
+            <div class="dataq-icon-box">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+            </div>
+            <div class="dataq-title">Challenge Data</div>
+        </div>
+        <div class="dataq-content">
+            <p class="dataq-text">You can dispute inaccurate inspections through the FMCSA DataQs system.</p>
+        </div>
+        <button class="dataq-button" onclick="window.location.href='dataq.html'">
+            Learn More About DataQs Here
+        </button>
+        <div class="dataq-footer">
+            Data Source: All data from FMCSA SMS datasets. SafetyCheckPro does not calculate or forecast scores.
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target) && 
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('load', function() {
+            const bars = document.querySelectorAll('.basic-bar');
+            bars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

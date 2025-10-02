@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafetyCheckPro - System Logs Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #003d6b;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --border-color: #e5e7eb;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-secondary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 100;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            flex-shrink: 0;
+            margin-right: -0.5rem;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .logo-tagline {
+            font-size: 0.5rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.125rem;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 500px;
+            font-size: 0.625rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 1rem auto;
+            display: inline-block;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 0;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 2rem;
+            text-decoration: none;
+            color: #4b5563;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            background: #f3f4f6;
+        }
+
+        .nav-item.active {
+            color: white;
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #4CAF50;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
+        }
+
+        .sidebar-footer {
+            padding: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .powered-by {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        /* Top Right User Info and Help */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 50;
+        }
+
+        .help-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,61,107,0.15);
+        }
+
+        .help-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,61,107,0.3);
+        }
+
+        .help-button svg {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: white;
+            padding: 0.5rem 1rem 0.5rem 0.5rem;
+            border-radius: 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .user-details {
+            padding-right: 0.5rem;
+        }
+
+        .user-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #111827;
+            line-height: 1.2;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: #6b7280;
+            line-height: 1.2;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            height: 100vh;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .content-wrapper {
+            padding: 2rem;
+            padding-top: 5rem;
+            padding-bottom: 200px;
+            min-height: 100vh;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.625rem 1.5rem;
+            border: none;
+            border-radius: 500px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,61,107,0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,61,107,0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Log Filters */
+        .log-filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #f3f4f6;
+            margin-bottom: 2rem;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 61, 107, 0.1);
+        }
+
+        .level-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .level-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .level-btn.active {
+            color: white;
+            border-color: transparent;
+        }
+
+        .level-btn.info.active {
+            background: var(--info);
+        }
+
+        .level-btn.success.active {
+            background: var(--success);
+        }
+
+        .level-btn.warning.active {
+            background: var(--warning);
+        }
+
+        .level-btn.error.active {
+            background: var(--danger);
+        }
+
+        .level-btn.debug.active {
+            background: #6b7280;
+        }
+
+        /* Logs Container */
+        .logs-container {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+            color: #e2e8f0;
+            max-height: 600px;
+            overflow-y: auto;
+            font-size: 0.813rem;
+            line-height: 1.5;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .logs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .logs-title {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logs-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .log-action-btn {
+            padding: 0.25rem 0.75rem;
+            background: #334155;
+            border: none;
+            border-radius: 4px;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .log-action-btn:hover {
+            background: #475569;
+            color: #e2e8f0;
+        }
+
+        .log-entry {
+            display: flex;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .log-entry:hover {
+            background: #334155;
+        }
+
+        .log-timestamp {
+            color: #64748b;
+            min-width: 180px;
+            margin-right: 1rem;
+        }
+
+        .log-level {
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 60px;
+            text-align: center;
+            margin-right: 1rem;
+        }
+
+        .level-info {
+            background: #1e40af;
+            color: #dbeafe;
+        }
+
+        .level-success {
+            background: #166534;
+            color: #bbf7d0;
+        }
+
+        .level-warning {
+            background: #a16207;
+            color: #fef3c7;
+        }
+
+        .level-error {
+            background: #991b1b;
+            color: #fecaca;
+        }
+
+        .level-debug {
+            background: #4b5563;
+            color: #e5e7eb;
+        }
+
+        .log-source {
+            color: #8b5cf6;
+            min-width: 120px;
+            margin-right: 1rem;
+        }
+
+        .log-message {
+            color: #e2e8f0;
+            flex: 1;
+        }
+
+        .log-user {
+            color: #60a5fa;
+            margin-left: auto;
+            padding-left: 1rem;
+        }
+
+        /* Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #f3f4f6;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #003d6b15, #0056a315);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Activity Timeline */
+        .timeline-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #f3f4f6;
+        }
+
+        .timeline-header {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -24px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--primary);
+        }
+
+        .timeline-content {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .timeline-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-text {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        .footer {
+            background: #f8f9fa;
+            color: #111827;
+            padding: 3rem 0 1rem;
+            margin-top: 3rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #003d6b;
+        }
+
+        .footer-disclaimer {
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .footer-disclaimer h4 {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: #111827;
+        }
+
+        .footer-disclaimer p {
+            font-size: 0.75rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .footer-bottom {
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-badges {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .footer-badge {
+            background: white;
+            padding: 0.375rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.625rem;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+        }
+
+        /* Auto-scroll indicator */
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .auto-scroll-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100%;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 1001;
+                background: white;
+                border: none;
+                padding: 0.5rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                cursor: pointer;
+            }
+
+            .main-content {
+                min-height: 100vh;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <a href="admin-dashboard.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Animated Radar -->
+                        <circle cx="30" cy="30" r="25" fill="none" stroke="#4CAF50" stroke-width="2" opacity="0.3">
+                            <animate attributeName="r" from="20" to="28" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" from="0.5" to="0" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="30" cy="30" r="20" fill="none" stroke="#4CAF50" stroke-width="3" opacity="0.8"/>
+                        <circle cx="30" cy="30" r="12" fill="none" stroke="#4CAF50" stroke-width="2.5" opacity="0.6"/>
+                        <g transform-origin="30 30" style="animation: rotate 3s linear infinite;">
+                            <line x1="30" y1="30" x2="30" y2="10" stroke="#4CAF50" stroke-width="2.5" opacity="0.8"/>
+                            <path d="M 30 30 L 30 10 A 20 20 0 0 1 45 20 Z" fill="#4CAF50" opacity="0.15"/>
+                        </g>
+                        <circle cx="30" cy="30" r="5" fill="#003d6b"/>
+                        <circle cx="30" cy="30" r="3" fill="#4CAF50"/>
+                    </svg>
+                    <div class="logo-text-wrapper">
+                        <div class="logo-text">
+                            <span style="color: #003d6b;">Safety</span><span style="color: #4CAF50;">Check</span><span style="color: #003d6b;">Pro</span>
+                        </div>
+                        <div class="logo-tagline">Admin Dashboard</div>
+                    </div>
+                </a>
+                <div style="text-align: center;">
+                    <span class="admin-badge">Admin Access</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="admin-dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                    Control Center
+                </a>
+                <a href="admin-customers.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                    Customers
+                </a>
+                <a href="admin-data-sync.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                    </svg>
+                    Data Sync
+                </a>
+                <a href="admin-tickets.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    Support Tickets
+                </a>
+                <a href="admin-alerts.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                    </svg>
+                    Alert System
+                </a>
+                <a href="admin-analytics.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                    </svg>
+                    Analytics
+                </a>
+                <a href="admin-billing.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                    </svg>
+                    Billing
+                </a>
+                <a href="admin-system.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l-5.5 9h11z M12 22l5.5-9h-11z M12 7.5c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5z"/>
+                    </svg>
+                    System Health
+                </a>
+                <a href="admin-logs.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                    System Logs
+                </a>
+                <a href="admin-settings.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="powered-by">
+                    System Administrator<br>
+                    Jenken Safety Services<br>
+                    <span style="color: var(--success);">• Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- User Info in Top Right -->
+            <div class="top-bar">
+                <button class="help-button" onclick="window.location.href='admin-support.html'" title="Get Help">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                    </svg>
+                </button>
+                <div class="user-info">
+                    <div class="user-avatar">AD</div>
+                    <div class="user-details">
+                        <div class="user-name">Admin User</div>
+                        <div class="user-role">System Administrator</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">System Logs</h1>
+                        <p class="page-subtitle">Monitor system activity, errors, and performance logs</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="exportLogs()">
+                            Export Logs
+                        </button>
+                        <button class="btn btn-danger" onclick="clearLogs()">
+                            Clear Old Logs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Log Statistics -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Total Logs Today</span>
+                            <div class="stat-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#003d6b">
+                                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-value">24,738</div>
+                        <div class="stat-subtitle">Last updated: 2 seconds ago</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Error Logs</span>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #ef444415, #dc262615);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#ef4444">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-value">47</div>
+                        <div class="stat-subtitle">3 critical errors</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Warning Logs</span>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #f9980015, #f5970615);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#FF9800">
+                                    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-value">283</div>
+                        <div class="stat-subtitle">Performance warnings: 124</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">API Calls</span>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f615, #2563eb15);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#3b82f6">
+                                    <path d="M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-value">2.4M</div>
+                        <div class="stat-subtitle">Avg response: 124ms</div>
+                    </div>
+                </div>
+
+                <!-- Log Filters -->
+                <div class="log-filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Search Logs</label>
+                            <input type="text" class="filter-input" placeholder="Search by keyword..." id="searchInput">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Source</label>
+                            <select class="filter-input" id="sourceFilter">
+                                <option value="all">All Sources</option>
+                                <option value="api">API</option>
+                                <option value="auth">Authentication</option>
+                                <option value="database">Database</option>
+                                <option value="fmcsa">FMCSA Sync</option>
+                                <option value="payment">Payment</option>
+                                <option value="email">Email Service</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Date Range</label>
+                            <input type="date" class="filter-input" id="dateFilter">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">User</label>
+                            <input type="text" class="filter-input" placeholder="User ID or email..." id="userFilter">
+                        </div>
+                    </div>
+                    <div class="level-filters">
+                        <button class="level-btn info active" onclick="toggleLevel('info')">INFO</button>
+                        <button class="level-btn success active" onclick="toggleLevel('success')">SUCCESS</button>
+                        <button class="level-btn warning active" onclick="toggleLevel('warning')">WARNING</button>
+                        <button class="level-btn error active" onclick="toggleLevel('error')">ERROR</button>
+                        <button class="level-btn debug" onclick="toggleLevel('debug')">DEBUG</button>
+                    </div>
+                </div>
+
+                <!-- Live Logs Container -->
+                <div class="logs-container">
+                    <div class="logs-header">
+                        <div class="logs-title">
+                            LIVE SYSTEM LOGS
+                            <span class="auto-scroll-indicator" id="autoScrollIndicator"></span>
+                        </div>
+                        <div class="logs-actions">
+                            <button class="log-action-btn" onclick="toggleAutoScroll()">Auto-scroll: ON</button>
+                            <button class="log-action-btn" onclick="pauseLogs()">Pause</button>
+                            <button class="log-action-btn" onclick="clearDisplay()">Clear</button>
+                        </div>
+                    </div>
+                    <div id="logsContent">
+                        <!-- Logs will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="timeline-container">
+                    <h3 class="timeline-header">Critical Events Timeline</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">2 hours ago</div>
+                                <div class="timeline-text">System backup completed successfully. 247GB backed up to AWS S3.</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot" style="border-color: var(--warning);"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">4 hours ago</div>
+                                <div class="timeline-text">FMCSA API response time degraded. Average response increased to 2.3s.</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot" style="border-color: var(--danger);"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">6 hours ago</div>
+                                <div class="timeline-text">Database connection pool exhausted. Auto-scaling initiated.</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">8 hours ago</div>
+                                <div class="timeline-text">New SSL certificate deployed successfully for all domains.</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">12 hours ago</div>
+                                <div class="timeline-text">Monthly maintenance completed. All services operational.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer class="footer">
+                    <div class="footer-content">
+                        <div class="footer-grid">
+                            <div class="footer-section">
+                                <h3>About SafetyCheckPro Admin</h3>
+                                <p style="color: #6b7280; font-size: 0.875rem; line-height: 1.5;">
+                                    Administrative control center for SafetyCheckPro - Managing fleet safety compliance and data synchronization.
+                                </p>
+                            </div>
+                            
+                            <div class="footer-section">
+                                <h3>Admin Tools</h3>
+                                <ul class="footer-links">
+                                    <li><a href="admin-dashboard.html">Dashboard</a></li>
+                                    <li><a href="admin-customers.html">Customer Management</a></li>
+                                    <li><a href="admin-data-sync.html">Data Sync Monitor</a></li>
+                                    <li><a href="admin-logs.html">System Logs</a></li>
+                                    <li><a href="admin-tickets.html">Support Tickets</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="footer-section">
+                                <h3>System</h3>
+                                <ul class="footer-links">
+                                    <li><a href="admin-system.html">System Health</a></li>
+                                    <li><a href="admin-analytics.html">Analytics</a></li>
+                                    <li><a href="admin-alerts.html">Alert Configuration</a></li>
+                                    <li><a href="admin-settings.html">Settings</a></li>
+                                    <li><a href="admin-backup.html">System Backup</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="footer-section">
+                                <h3>Quick Actions</h3>
+                                <ul class="footer-links">
+                                    <li><a href="#" onclick="showBlockDOTModal()">Block DOT Number</a></li>
+                                    <li><a href="#" onclick="triggerManualSync()">Force Data Sync</a></li>
+                                    <li><a href="#" onclick="exportSystemLogs()">Export Logs</a></li>
+                                    <li><a href="admin-documentation.html">API Documentation</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="footer-disclaimer">
+                            <h4>System Information</h4>
+                            <p>
+                                SafetyCheckPro Admin Panel v2.0.1 | Connected to Production Environment | All system operations are logged for security and compliance purposes. 
+                                This administrative interface provides full control over customer accounts, data synchronization, and system configuration.
+                            </p>
+                        </div>
+                        
+                        <div class="footer-bottom">
+                            <div>© 2025 Jenken Safety Services. All rights reserved.</div>
+                            <div class="footer-badges">
+                                <span class="footer-badge">Environment: Production</span>
+                                <span class="footer-badge" style="background: var(--success); color: white;">System: Operational</span>
+                                <span class="footer-badge">Last Sync: 2 min ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let autoScroll = true;
+        let logsRunning = true;
+        let activeFilters = ['info', 'success', 'warning', 'error'];
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target) && 
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Sample log entries
+        const sampleLogs = [
+            { level: 'info', timestamp: '2025-01-28 14:23:47.342', source: 'API', message: 'GET /api/v1/customers - 200 OK (124ms)', user: 'system' },
+            { level: 'success', timestamp: '2025-01-28 14:23:48.126', source: 'Auth', message: 'User login successful', user: 'admin@jenken.com' },
+            { level: 'warning', timestamp: '2025-01-28 14:23:48.893', source: 'FMCSA', message: 'API response time exceeded threshold: 2847ms', user: 'system' },
+            { level: 'info', timestamp: '2025-01-28 14:23:49.221', source: 'Database', message: 'Query executed: SELECT * FROM inspections WHERE date > ?', user: 'system' },
+            { level: 'error', timestamp: '2025-01-28 14:23:49.556', source: 'Payment', message: 'Stripe webhook failed: Invalid signature', user: 'system' },
+            { level: 'info', timestamp: '2025-01-28 14:23:50.012', source: 'Email', message: 'Notification sent to customer DOT:2847293', user: 'system' },
+            { level: 'debug', timestamp: '2025-01-28 14:23:50.443', source: 'Cache', message: 'Redis cache hit for key: customer_2847293', user: 'system' },
+            { level: 'success', timestamp: '2025-01-28 14:23:51.229', source: 'Sync', message: 'Data synchronization completed for 52 records', user: 'system' },
+            { level: 'info', timestamp: '2025-01-28 14:23:51.887', source: 'API', message: 'POST /api/v1/inspections - 201 Created (234ms)', user: 'user_4729' },
+            { level: 'warning', timestamp: '2025-01-28 14:23:52.334', source: 'Database', message: 'Connection pool usage at 78%', user: 'system' }
+        ];
+
+        // Generate log HTML
+        function createLogEntry(log) {
+            return `
+                <div class="log-entry ${log.level}">
+                    <span class="log-timestamp">${log.timestamp}</span>
+                    <span class="log-level level-${log.level}">${log.level.toUpperCase()}</span>
+                    <span class="log-source">[${log.source}]</span>
+                    <span class="log-message">${log.message}</span>
+                    <span class="log-user">${log.user}</span>
+                </div>
+            `;
+        }
+
+        // Add new log entry
+        function addLogEntry() {
+            if (!logsRunning) return;
+
+            const logsContent = document.getElementById('logsContent');
+            const randomLog = sampleLogs[Math.floor(Math.random() * sampleLogs.length)];
+            
+            // Update timestamp to current time
+            const now = new Date();
+            const timestamp = now.toISOString().replace('T', ' ').slice(0, -1);
+            randomLog.timestamp = timestamp;
+            
+            // Only add if level is active
+            if (activeFilters.includes(randomLog.level)) {
+                logsContent.insertAdjacentHTML('beforeend', createLogEntry(randomLog));
+                
+                // Remove old entries if too many
+                const entries = logsContent.querySelectorAll('.log-entry');
+                if (entries.length > 100) {
+                    entries[0].remove();
+                }
+                
+                // Auto scroll if enabled
+                if (autoScroll) {
+                    logsContent.parentElement.scrollTop = logsContent.parentElement.scrollHeight;
+                }
+            }
+        }
+
+        // Toggle log level filter
+        function toggleLevel(level) {
+            const button = event.target;
+            button.classList.toggle('active');
+            
+            if (activeFilters.includes(level)) {
+                activeFilters = activeFilters.filter(l => l !== level);
+            } else {
+                activeFilters.push(level);
+            }
+            
+            // Refresh display
+            filterLogs();
+        }
+
+        // Filter existing logs
+        function filterLogs() {
+            const entries = document.querySelectorAll('.log-entry');
+            entries.forEach(entry => {
+                const level = entry.classList[1];
+                entry.style.display = activeFilters.includes(level) ? 'flex' : 'none';
+            });
+        }
+
+        // Toggle auto-scroll
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            event.target.textContent = `Auto-scroll: ${autoScroll ? 'ON' : 'OFF'}`;
+            document.getElementById('autoScrollIndicator').style.display = autoScroll ? 'inline-block' : 'none';
+        }
+
+        // Pause/Resume logs
+        function pauseLogs() {
+            logsRunning = !logsRunning;
+            event.target.textContent = logsRunning ? 'Pause' : 'Resume';
+        }
+
+        // Clear display
+        function clearDisplay() {
+            document.getElementById('logsContent').innerHTML = '';
+        }
+
+        // Export logs
+        function exportLogs() {
+            alert('Exporting logs to CSV format...');
+            setTimeout(() => {
+                alert('Logs exported successfully!');
+            }, 1500);
+        }
+
+        // Clear old logs
+        function clearLogs() {
+            if (confirm('Are you sure you want to clear logs older than 30 days? This action cannot be undone.')) {
+                alert('Clearing old logs...');
+                setTimeout(() => {
+                    alert('Old logs cleared successfully!');
+                }, 2000);
+            }
+        }
+
+        // Quick actions
+        function showBlockDOTModal() {
+            alert('Block DOT modal would open here');
+        }
+
+        function triggerManualSync() {
+            if (confirm('Are you sure you want to trigger a manual data sync?')) {
+                alert('Data sync initiated');
+            }
+        }
+
+        function exportSystemLogs() {
+            exportLogs();
+        }
+
+        // Initialize logs
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add initial logs
+            for (let i = 0; i < 20; i++) {
+                addLogEntry();
+            }
+            
+            // Add new logs periodically
+            setInterval(addLogEntry, Math.random() * 2000 + 500);
+        });
+    </script>
+</body>
+</html>

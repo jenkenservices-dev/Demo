@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Setup - SafetyCheckPro™ Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #003d6b;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --border-color: #e5e7eb;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-secondary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            flex-shrink: 0;
+            margin-right: -0.5rem;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .logo-tagline {
+            font-size: 0.5rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.125rem;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 500px;
+            font-size: 0.625rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 1rem auto;
+            display: inline-block;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 2rem;
+            text-decoration: none;
+            color: #4b5563;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            background: #f3f4f6;
+        }
+
+        .nav-item.active {
+            color: white;
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #4CAF50;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+        }
+
+        .powered-by {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            padding: 2rem;
+            padding-top: 5rem;
+            background: white;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 280px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            z-index: 50;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .help-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #003d6b, #0056a3);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,61,107,0.15);
+        }
+
+        .help-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,61,107,0.3);
+        }
+
+        .help-button svg {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: white;
+            padding: 0.5rem 1rem 0.5rem 0.5rem;
+            border-radius: 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .user-details {
+            padding-right: 0.5rem;
+        }
+
+        .user-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #111827;
+            line-height: 1.2;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: #6b7280;
+            line-height: 1.2;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Tabs Navigation */
+        .tabs-container {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 1rem;
+        }
+
+        .tab-btn {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .tab-content {
+            padding: 2rem;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Template Editor Section */
+        .template-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .template-list {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .template-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .template-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .template-item.active {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,61,107,0.15);
+        }
+
+        .template-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .template-type {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .template-badge {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 500px;
+            font-size: 0.625rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 0.5rem;
+        }
+
+        .badge-email {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-sms {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .template-editor {
+            background: white;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .editor-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,61,107,0.1);
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+            font-size: 0.813rem;
+        }
+
+        .variable-list {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .variable-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .variable-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .variable-tag {
+            background: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 500px;
+            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+            color: var(--primary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .variable-tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Mass Communication Section */
+        .mass-comm-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .recipient-selector {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .filter-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .filter-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 500px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .filter-chip input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .filter-chip.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .recipient-count {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .count-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .count-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .message-composer {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .delivery-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .delivery-option {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .delivery-option.selected {
+            border-color: var(--primary);
+            background: rgba(0,61,107,0.05);
+        }
+
+        .delivery-icon {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delivery-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .delivery-desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Settings Section */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .settings-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #cbd5e1;
+            transition: .4s;
+            border-radius: 500px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background: var(--success);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .setting-value {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        /* Common Components */
+        .card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #0056a3);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,61,107,0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Schedule Options */
+        .schedule-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .schedule-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .schedule-option input[type="radio"] {
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: #94a3b8;
+            padding: 3rem 2rem 2rem;
+            margin-left: 280px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--success);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .copyright {
+            font-size: 0.875rem;
+        }
+
+        .footer-badges {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .footer-badge {
+            background: #374151;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mass-comm-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -280px;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .top-bar {
+                left: 0;
+            }
+
+            .footer {
+                margin-left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <a href="admin-dashboard.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Animated Radar -->
+                        <circle cx="30" cy="30" r="25" fill="none" stroke="#4CAF50" stroke-width="2" opacity="0.3">
+                            <animate attributeName="r" from="20" to="28" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" from="0.5" to="0" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="30" cy="30" r="20" fill="none" stroke="#4CAF50" stroke-width="3" opacity="0.8"/>
+                        <circle cx="30" cy="30" r="12" fill="none" stroke="#4CAF50" stroke-width="2.5" opacity="0.6"/>
+                        <g transform-origin="30 30" style="animation: rotate 3s linear infinite;">
+                            <line x1="30" y1="30" x2="30" y2="10" stroke="#4CAF50" stroke-width="2.5" opacity="0.8"/>
+                            <path d="M 30 30 L 30 10 A 20 20 0 0 1 45 20 Z" fill="#4CAF50" opacity="0.15"/>
+                        </g>
+                        <circle cx="30" cy="30" r="5" fill="#003d6b"/>
+                        <circle cx="30" cy="30" r="3" fill="#4CAF50"/>
+                    </svg>
+                    <div class="logo-text-wrapper">
+                        <div class="logo-text">
+                            <span style="color: #003d6b;">Safety</span><span style="color: #4CAF50;">Check</span><span style="color: #003d6b;">Pro</span>
+                        </div>
+                        <div class="logo-tagline">Admin Dashboard</div>
+                    </div>
+                </a>
+                <div style="text-align: center;">
+                    <span class="admin-badge">Admin Access</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="admin-dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="admin-customers.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                    Customers
+                </a>
+                <a href="admin-data-sync.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                    </svg>
+                    Data Sync
+                </a>
+                <a href="admin-tickets.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    Support Tickets
+                </a>
+                <a href="admin-alerts.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                    </svg>
+                    Alert System
+                </a>
+                <a href="admin-notifications.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                    Notifications
+                </a>
+                <a href="admin-analytics.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                    </svg>
+                    Analytics
+                </a>
+                <a href="admin-billing.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                    </svg>
+                    Billing
+                </a>
+                <a href="admin-system.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l-5.5 9h11z M12 22l5.5-9h-11z M12 7.5c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5z"/>
+                    </svg>
+                    System Health
+                </a>
+                <a href="admin-logs.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                    System Logs
+                </a>
+                <a href="admin-settings.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="powered-by">
+                    System Administrator<br>
+                    Jenken Safety Services<br>
+                    <span style="color: var(--success);">• Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <button class="help-button" onclick="window.location.href='admin-support.html'" title="Get Help">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                    </svg>
+                </button>
+                <div class="user-info">
+                    <div class="user-avatar">AD</div>
+                    <div class="user-details">
+                        <div class="user-name">Admin User</div>
+                        <div class="user-role">System Administrator</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Notification Management</h1>
+                    <p class="page-subtitle">Configure email/SMS templates, settings, and send mass communications</p>
+                </div>
+
+                <!-- Tabs Container -->
+                <div class="tabs-container">
+                    <div class="tabs-nav">
+                        <button class="tab-btn active" onclick="switchTab('templates')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                            </svg>
+                            Templates
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('mass-comm')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/>
+                            </svg>
+                            Mass Communication
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('settings')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z"/>
+                            </svg>
+                            Settings
+                        </button>
+                    </div>
+
+                    <!-- Templates Tab -->
+                    <div class="tab-content active" id="templates-tab">
+                        <div class="template-grid">
+                            <!-- Template List -->
+                            <div class="template-list">
+                                <div class="template-item active" onclick="selectTemplate(this, 'inspection')">
+                                    <div class="template-name">
+                                        New Inspection Alert
+                                        <span class="template-badge badge-email">EMAIL</span>
+                                    </div>
+                                    <div class="template-type">Sent when new inspection posted</div>
+                                </div>
+                                <div class="template-item" onclick="selectTemplate(this, 'violation')">
+                                    <div class="template-name">
+                                        Violation Alert
+                                        <span class="template-badge badge-sms">SMS</span>
+                                    </div>
+                                    <div class="template-type">OOS violations notification</div>
+                                </div>
+                                <div class="template-item" onclick="selectTemplate(this, 'score')">
+                                    <div class="template-name">
+                                        Score Threshold Alert
+                                        <span class="template-badge badge-email">EMAIL</span>
+                                    </div>
+                                    <div class="template-type">CSA score exceeds limit</div>
+                                </div>
+                                <div class="template-item" onclick="selectTemplate(this, 'welcome')">
+                                    <div class="template-name">
+                                        Welcome Message
+                                        <span class="template-badge badge-email">EMAIL</span>
+                                    </div>
+                                    <div class="template-type">New customer onboarding</div>
+                                </div>
+                                <div class="template-item" onclick="selectTemplate(this, 'reminder')">
+                                    <div class="template-name">
+                                        Renewal Reminder
+                                        <span class="template-badge badge-email">EMAIL</span>
+                                        <span class="template-badge badge-sms">SMS</span>
+                                    </div>
+                                    <div class="template-type">Subscription renewal notice</div>
+                                </div>
+                                <div class="template-item" onclick="selectTemplate(this, 'dataq')">
+                                    <div class="template-name">
+                                        DataQ Reminder
+                                        <span class="template-badge badge-email">EMAIL</span>
+                                    </div>
+                                    <div class="template-type">8-day DataQ deadline reminder</div>
+                                </div>
+                            </div>
+
+                            <!-- Template Editor -->
+                            <div class="template-editor">
+                                <div class="editor-header">
+                                    <h3 class="editor-title">Edit Template: New Inspection Alert</h3>
+                                    <div class="editor-actions">
+                                        <button class="btn btn-secondary">Preview</button>
+                                        <button class="btn btn-success">Save Template</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Template Name</label>
+                                    <input type="text" class="form-input" value="New Inspection Alert">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Delivery Method</label>
+                                    <select class="form-select">
+                                        <option>Email Only</option>
+                                        <option>SMS Only</option>
+                                        <option>Email + SMS</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Subject Line (Email)</label>
+                                    <input type="text" class="form-input" value="New Inspection Alert - {{company_name}} (DOT: {{dot_number}})">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Message Body</label>
+                                    <textarea class="form-textarea">Dear {{recipient_name}},
+
+A new inspection has been posted to your FMCSA record that requires your immediate attention.
+
+INSPECTION DETAILS:
+• Report Number: {{report_number}}
+• Inspection Date: {{inspection_date}}
+• Location: {{location}}
+• Level: {{inspection_level}}
+• Total Violations: {{violation_count}}
+• Out of Service: {{oos_count}}
+
+VIOLATIONS FOUND:
+{{violation_list}}
+
+ACTION REQUIRED:
+Please log into your SafetyCheckPro account to review the complete inspection report and begin any necessary DataQ challenges if applicable.
+
+This inspection will affect your CSA scores in the following BASICs:
+{{affected_basics}}
+
+Access your dashboard: {{dashboard_link}}
+
+Best regards,
+SafetyCheckPro Alert System</textarea>
+                                </div>
+
+                                <div class="variable-list">
+                                    <div class="variable-title">Available Variables (click to insert)</div>
+                                    <div class="variable-items">
+                                        <span class="variable-tag" onclick="insertVariable('{{company_name}}')">{{company_name}}</span>
+                                        <span class="variable-tag" onclick="insertVariable('{{dot_number}}')">{{dot_number}}</span>
+                                        <span class="variable-tag" onclick="insertVariable('{{recipient_name}}')">{{recipient_name}}</span>
+                                        <span class="variable-tag" onclick="insertVariable('{{report_number}}')">{{report_number}}</span>
+                                        <span class="variable-tag" onclick="insertVariable('{{inspection_date}}')">{{inspection_date}}</span>
+                                        <span class="variable-tag" onclick="insertVariable('{{location}}')">{{location}}</span>
+                                        <span class="variable-tag" onclick="insertVariable('{{violation_count}}')">{{violation_count}}</span>
+                                        <span class="variable-tag" onclick="insertVariable('{{dashboard_link}}')">{{dashboard_link}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mass Communication Tab -->
+                    <div class="tab-content" id="mass-comm-tab">
+                        <div class="mass-comm-container">
+                            <!-- Recipient Selector -->
+                            <div class="recipient-selector">
+                                <h3 class="card-title">Select Recipients</h3>
+                                
+                                <div class="filter-section">
+                                    <label class="form-label">Filter by Plan</label>
+                                    <div class="filter-options">
+                                        <label class="filter-chip">
+                                            <input type="checkbox" checked>
+                                            <span>All Plans</span>
+                                        </label>
+                                        <label class="filter-chip">
+                                            <input type="checkbox">
+                                            <span>Enterprise</span>
+                                        </label>
+                                        <label class="filter-chip">
+                                            <input type="checkbox">
+                                            <span>Professional</span>
+                                        </label>
+                                        <label class="filter-chip">
+                                            <input type="checkbox">
+                                            <span>Standard</span>
+                                        </label>
+                                        <label class="filter-chip">
+                                            <input type="checkbox">
+                                            <span>Basic</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="filter-section">
+                                    <label class="form-label">Filter by Status</label>
+                                    <div class="filter-options">
+                                        <label class="filter-chip selected">
+                                            <input type="checkbox" checked>
+                                            <span>Active</span>
+                                        </label>
+                                        <label class="filter-chip">
+                                            <input type="checkbox">
+                                            <span>Trial</span>
+                                        </label>
+                                        <label class="filter-chip">
+                                            <input type="checkbox">
+                                            <span>Expired</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="filter-section">
+                                    <label class="form-label">Filter by Score Alert</label>
+                                    <div class="filter-options">
+                                        <label class="filter-chip">
+                                            <input type="checkbox">
+                                            <span>Score > 80%</span>
+                                        </label>
+                                        <label class="filter-chip">
+                                            <input type="checkbox">
+                                            <span>Has OOS Violations</span>
+                                        </label>
+                                        <label class="filter-chip">
+                                            <input type="checkbox">
+                                            <span>Recent Inspection</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="recipient-count">
+                                    <div class="count-value">1,847</div>
+                                    <div class="count-label">Recipients Selected</div>
+                                </div>
+                            </div>
+
+                            <!-- Message Composer -->
+                            <div class="message-composer">
+                                <h3 class="card-title">Compose Message</h3>
+
+                                <div class="delivery-options">
+                                    <div class="delivery-option selected" onclick="selectDelivery(this, 'email')">
+                                        <div class="delivery-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="delivery-label">Email</div>
+                                        <div class="delivery-desc">HTML formatted</div>
+                                    </div>
+                                    <div class="delivery-option" onclick="selectDelivery(this, 'sms')">
+                                        <div class="delivery-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.12-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="delivery-label">SMS</div>
+                                        <div class="delivery-desc">160 characters</div>
+                                    </div>
+                                    <div class="delivery-option" onclick="selectDelivery(this, 'both')">
+                                        <div class="delivery-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="delivery-label">Both</div>
+                                        <div class="delivery-desc">Email + SMS</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Subject Line</label>
+                                    <input type="text" class="form-input" placeholder="Enter email subject...">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Message</label>
+                                    <textarea class="form-textarea" placeholder="Type your message here..."></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Schedule</label>
+                                    <div class="schedule-options">
+                                        <label class="schedule-option">
+                                            <input type="radio" name="schedule" checked>
+                                            <span>Send immediately</span>
+                                        </label>
+                                        <label class="schedule-option">
+                                            <input type="radio" name="schedule">
+                                            <span>Schedule for later</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                                    <button class="btn btn-secondary">Save as Draft</button>
+                                    <button class="btn btn-warning">Send Test</button>
+                                    <button class="btn btn-primary btn-full" onclick="sendMassCommunication()">
+                                        Send to 1,847 Recipients
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Tab -->
+                    <div class="tab-content" id="settings-tab">
+                        <div class="settings-grid">
+                            <!-- Email Settings -->
+                            <div class="settings-card">
+                                <div class="settings-header">
+                                    <h3 class="settings-title">Email Configuration</h3>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="setting-label">From Name</span>
+                                    <span class="setting-value">SafetyCheckPro Alerts</span>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="setting-label">From Email</span>
+                                    <span class="setting-value">alerts@safetycheckpro.com</span>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="setting-label">Reply-To Email</span>
+                                    <span class="setting-value">support@safetycheckpro.com</span>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="setting-label">Daily Send Limit</span>
+                                    <span class="setting-value">10,000</span>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="setting-label">Track Opens</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- SMS Settings -->
+                            <div class="settings-card">
+                                <div class="settings-header">
+                                    <h3 class="settings-title">SMS Configuration</h3>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="setting-label">Provider</span>
+                                    <span class="setting-value">Twilio</span>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="setting-label">From Number</span>
+                                    <span class="setting-value">+1 (800) 555-0100</span>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="setting-label">Daily Limit</span>
+                                    <span class="setting-value">5,000</span>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="setting-label">Credits Remaining</span>
+                                    <span class="setting-value" style="color: var(--success);">48,293</span>
+                                </div>
