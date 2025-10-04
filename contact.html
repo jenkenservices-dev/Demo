@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SafetyCheck Pro™ - Contact us about DOT inspection monitoring">
+    <title>Contact - SafetyCheck Pro™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #003d6b;
+            --navy-dark: #001f3d;
+            --green: #4CAF50;
+            --green-light: #6FCF73;
+            --green-dark: #388E3C;
+            --orange: #FF9800;
+            --red: #f44336;
+            --gray-900: #0f172a;
+            --gray-800: #1e293b;
+            --gray-700: #334155;
+            --gray-600: #475569;
+            --gray-500: #64748b;
+            --gray-400: #94a3b8;
+            --gray-300: #cbd5e1;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --white: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #003d6b 0%, #00264d 100%);
+            --gradient-green: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            --gradient-mesh: radial-gradient(at 40% 20%, hsla(208, 100%, 20%, 0.3) 0px, transparent 50%),
+                            radial-gradient(at 80% 0%, hsla(142, 50%, 50%, 0.2) 0px, transparent 50%),
+                            radial-gradient(at 0% 50%, hsla(208, 100%, 30%, 0.2) 0px, transparent 50%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient-mesh), var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Navigation - Matching index page exactly */
+        .nav-header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 61, 107, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-mark {
+            position: relative;
+            width: 45px;
+            height: 45px;
+        }
+
+        .radar-ring {
+            position: absolute;
+            border: 2px solid var(--green);
+            border-radius: 50%;
+            opacity: 0;
+            animation: radarPulse 3s infinite;
+        }
+
+        .radar-ring:nth-child(1) {
+            width: 100%;
+            height: 100%;
+            animation-delay: 0s;
+        }
+
+        .radar-ring:nth-child(2) {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            animation-delay: 0.5s;
+        }
+
+        .radar-ring:nth-child(3) {
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            animation-delay: 1s;
+        }
+
+        @keyframes radarPulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        .radar-center {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--navy);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-main {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .logo-safety {
+            color: var(--navy);
+        }
+
+        .logo-check {
+            color: var(--green);
+        }
+
+        .logo-pro {
+            color: var(--navy);
+        }
+
+        .logo-powered {
+            font-size: 0.65rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--navy);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--gradient-green);
+            color: white !important;
+            padding: 0.5rem 1.5rem;
+            border-radius: 500px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .nav-cta::after {
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0 3rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 500px;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        /* Simple Contact Form */
+        .form-section {
+            padding: 3rem 0 6rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            padding: 0 2rem;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 61, 107, 0.08);
+            border: 1px solid var(--gray-100);
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+
+        .form-label .required {
+            color: var(--red);
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--gray-900);
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .btn-submit {
+            background: var(--gradient-green);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 500px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(76, 175, 80, 0.4);
+        }
+
+        .form-note {
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        /* Chat Bubble - Simple floating bubble matching live site */
+        .chat-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--green);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            max-width: 280px;
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(76, 175, 80, 0.4);
+        }
+
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            background: white;
+            color: var(--green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .chat-message-preview {
+            font-size: 0.95rem;
+            line-height: 1.3;
+            font-weight: 500;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
+            border: 2px solid var(--green);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: var(--green-dark);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .logo-main {
+                font-size: 1.25rem;
+            }
+
+            .hero {
+                padding: 4rem 1rem 2rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-bubble {
+                right: 20px;
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <a href="index.html" class="logo-container">
+                <div class="logo-mark">
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-center"></div>
+                </div>
+                <div class="logo-text">
+                    <div class="logo-main">
+                        <span class="logo-safety">Safety</span><span class="logo-check">Check</span><span class="logo-pro">Pro</span>
+                    </div>
+                    <span class="logo-powered">Powered by Jenken Safety Services</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="demo.html" class="nav-link">Demo</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="login-page.html" class="nav-link">Login</a>
+                <a href="signup-page.html" class="nav-link nav-cta">Get Started →</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="status-badge">
+            <span class="status-dot"></span>
+            <span style="color: var(--green-dark); font-weight: 600; font-size: 0.875rem;">Simple Support When You Need It</span>
+        </div>
+        
+        <h1 class="hero-title">
+            Get In Touch
+        </h1>
+        
+        <p class="hero-subtitle">
+            Have a question? We're here to help.<br>
+            Fill out the form below and we'll get back to you quickly.
+        </p>
+    </section>
+
+    <!-- Simple Contact Form -->
+    <section class="form-section">
+        <div class="form-container">
+            <div class="form-card">
+                <div id="successMessage" class="success-message">
+                    Thank you! We've received your message and will respond shortly.
+                </div>
+
+                <form id="contactForm">
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    First Name <span class="required">*</span>
+                                </label>
+                                <input type="text" class="form-input" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Last Name <span class="required">*</span>
+                                </label>
+                                <input type="text" class="form-input" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Email <span class="required">*</span>
+                            </label>
+                            <input type="email" class="form-input" name="email" required placeholder="you@company.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Phone <span class="required">*</span>
+                            </label>
+                            <input type="tel" class="form-input" name="phone" required placeholder="(555) 123-4567">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Company Name</label>
+                                <input type="text" class="form-input" name="company">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">DOT Number</label>
+                                <input type="text" class="form-input" name="dot" placeholder="1234567">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Subject <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" name="subject" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Message <span class="required">*</span>
+                            </label>
+                            <textarea class="form-textarea" name="message" required placeholder="Tell us how we can help..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-submit">Send Message</button>
+                    </div>
+                </form>
+
+                <p class="form-note">
+                    We'll respond to your message as soon as possible.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Widget - Simple floating bubble -->
+    <div class="chat-bubble" onclick="scrollToForm()">
+        <div class="chat-avatar">MT</div>
+        <div class="chat-message-preview">
+            Hi there! 👋<br>
+            Need help? Let's chat!
+        </div>
+    </div>
+
+    <script>
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show success message
+            document.getElementById('successMessage').classList.add('show');
+            
+            // Scroll to top of form
+            document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth' });
+            
+            // Reset form after delay
+            setTimeout(() => {
+                this.reset();
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('successMessage').classList.remove('show');
+                }, 5000);
+            }, 500);
+        });
+
+        // Scroll to form when clicking chatbot
+        function scrollToForm() {
+            document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
+</body>
+</html>
